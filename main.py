@@ -48,7 +48,7 @@ def generate_result_template(행정동명):
 
     filtered = merged_model[merged_model['행정동_코드_명'] == 행정동명].copy()
     if filtered.empty:
-        return f"❌ '{{}}'에 대한 예측 결과가 없습니다.".format(행정동명)
+        return f"❌ '{행정동명}'에 대한 예측 결과가 없습니다."
 
     filtered['예측_등급'] = filtered['예측_등급'].map(등급_텍스트)
     result_summary = filtered[['서비스_업종_코드_명', '예측_등급']].drop_duplicates()
@@ -56,18 +56,19 @@ def generate_result_template(행정동명):
     info = 등급_info[top_grade]
     reco = info['recommendations']
 
+    # 수정된 f-string
     output = f"""
-🔍 '{{행정동명}}' 상권 분석 결과
-예측 모델에 따르면 이 지역은 창업 적합도 등급 '{{top_grade}}' ({{info['desc']}})으로 분류되는 업종이 가장 많습니다.
+🔍 '{행정동명}' 상권 분석 결과
+예측 모델에 따르면 이 지역은 창업 적합도 등급 '{top_grade}' ({info['desc']})으로 분류되는 업종이 가장 많습니다.
 이는 전국 상권 데이터를 바탕으로 유동인구, 매출 흐름, 폐업률 등의 지표를 종합 분석한 결과입니다.
 
-- 모델 전체 정확도는 71%, '{{top_grade}}' 등급 예측의 정밀도는 약 {{info['precision']}}입니다.
+- 모델 전체 정확도는 71%, '{top_grade}' 등급 예측의 정밀도는 약 {info['precision']}입니다.
 - 분석 결과를 토대로, 이 지역에서는 다음과 같은 업종이 특히 적합한 업종군으로 추천됩니다:
 
 ✅ 추천 업종 TOP 3
-1. {{reco[0]}}
-2. {{reco[1]}}
-3. {{reco[2]}}
+1. {reco[0]}
+2. {reco[1]}
+3. {reco[2]}
 
 📌 추천 업종은 유사 상권에서 높은 생존율과 매출 흐름을 보인 업종을 기반으로 도출됩니다.
 """

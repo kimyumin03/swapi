@@ -1,0 +1,5 @@
+drive/
+.sample_data/
+.config/
+__pycache__/
+*.pyc

@@ -1,9 +1,23 @@
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 import pickle
 import pandas as pd
 
 app = FastAPI(title="상권 분석 예측 API")
+
+# CORS 설정: 필요에 따라 origins 수정하세요.
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          # 모든 출처 허용 (운영 시에는 특정 도메인만 허용 권장)
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # 모델과 데이터 로드 (서버 시작 시 1회)
 with open("model.pkl", "rb") as f:
